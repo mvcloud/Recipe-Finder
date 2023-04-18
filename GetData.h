@@ -1,19 +1,18 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
-#include <set>
+#include <unordered_map>
 #include "recipe.h"
 #pragma once
 using namespace std;
 
-set<Recipe*> GetDataFromCSVFile() {
+unordered_map<string, Recipe> GetDataFromCSVFile() {
     ifstream file("files/data.csv");
-    set<Recipe*> recipeList;
+    unordered_map<string, Recipe> recipeList;
 
     if (file.is_open()) {
         string lineFromFile;
         getline(file, lineFromFile);
-
         while(getline(file, lineFromFile)) {
             istringstream stream(lineFromFile);
 
@@ -61,8 +60,8 @@ set<Recipe*> GetDataFromCSVFile() {
             //cout << NER << endl;
 
             //cout << endl;
-            auto recipe = new Recipe(name,ingredients, instructions, link, NER);
-            recipeList.emplace(recipe);
+            Recipe recipe(name,ingredients, instructions, link, NER);
+            recipeList.emplace(name, recipe);
 
         }
     }
