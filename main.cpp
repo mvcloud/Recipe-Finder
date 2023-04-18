@@ -1,6 +1,5 @@
 #include <iostream>
-#include <map>
-#include <set>
+#include <unordered_map>
 #include "recipe.h"
 #include "GetData.h"
 #include "WelcomeWindow.h"
@@ -9,7 +8,7 @@ using namespace std;
 
 int main() {
 
-    set<Recipe*> recipes = GetDataFromCSVFile();
+    unordered_map<string, Recipe> recipes = GetDataFromCSVFile();
 
     bool doneWithWelcome = false;
     WelcomeWindow welcome;
