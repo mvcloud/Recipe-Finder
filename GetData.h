@@ -2,14 +2,18 @@
 #include <fstream>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include "recipe.h"
 #pragma once
 using namespace std;
 
-unordered_map<string, Recipe> GetDataFromCSVFile() {
-    ifstream file("files/data.csv");
-    unordered_map<string, Recipe> recipeList;
+// as you are parsing through the data, delete the ones that have the least matches (like 0 matches)
+// we can only have 13,122 recipes in the map because of stack memory, so try to sort it so that we have that amount
 
+unordered_map<string, Recipe*> GetDataFromCSVFile(unordered_set<string> &userIngredients) {
+
+    ifstream file("files/data.csv");
+    unordered_map<string, Recipe*> recipeList;
     if (file.is_open()) {
         string lineFromFile;
         getline(file, lineFromFile);
@@ -60,7 +64,7 @@ unordered_map<string, Recipe> GetDataFromCSVFile() {
             //cout << NER << endl;
 
             //cout << endl;
-            Recipe recipe(name,ingredients, instructions, link, NER);
+            Recipe* recipe = new Recipe(name,ingredients, instructions, link, NER);
             recipeList.emplace(name, recipe);
 
         }
