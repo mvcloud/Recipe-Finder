@@ -8,6 +8,7 @@ Recipe::Recipe(string &name, string &ingredients, string &instructions,
     this->instructions = instructions;
     this->link = link;
     this->NER = NER;
+    this->matchingIngredients = 0;
 }
 
 //accessors:
@@ -29,4 +30,9 @@ string Recipe::getLink() {
 
 string Recipe::getNER() {
     return NER;
+}
+
+//mutator:
+void Recipe::changeMatching(int &matching) {
+    matchingIngredients = matching;
 }
