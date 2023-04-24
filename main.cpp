@@ -1,44 +1,76 @@
-#include <iostream>
-#include <unordered_map>
 #include "recipe.h"
 #include "GetData.h"
 #include "WelcomeWindow.h"
+#include "ChooseAlgorithmWindow.h"
 #include "IngredientWindow.h"
 #include "RecommendationWindow.h"
+#include "ThankYouWindow.h"
 using namespace std;
-
-/*
- * No-Bake Nut Cookies
-1 c. firmly packed brown sugar, 1/2 c. evaporated milk, 1/2 tsp. vanilla, 1/2 c. broken nuts (pecans), 2 Tbsp. butter or margarine, 3 1/2 c. bite size shredded rice biscuits
-In a heavy 2-quart saucepan, mix brown sugar, nuts, evaporated milk and butter or margarine., Stir over medium heat until mixture bubbles all over top., Boil and stir 5 minutes more. Take off heat., Stir in vanilla and cereal; mix well., Using 2 teaspoons, drop and shape into 30 clusters on wax paper., Let stand until firm, about 30 minutes.
-www.cookbooks.com/Recipe-Details.aspx?id=44874
-brown sugar, milk, vanilla, nuts, butter, bite size shredded rice biscuits
- * */
-
 
 int main() {
 
+    // open welcome window
     bool doneWithWelcome = false;
     WelcomeWindow welcome;
     doneWithWelcome = welcome.WelcomeScreen();
 
     unordered_set<string> userIngredients;
 
+    // get the user's decision on what sorting algorithm to use
+    bool choseSortingAlgo = false;
     if (doneWithWelcome) {
+        ChooseAlgorithmWindow choseAlgorithmWindow;
+        choseAlgorithmWindow.ChooseAlgorithmScreen(choseSortingAlgo);
+    }
+
+    // when done with welcome window and choosing an algo, open up ingredient window and get/store
+    // the user's current ingredients
+    if (choseSortingAlgo) {
         IngredientWindow ingredientWindow;
         userIngredients = ingredientWindow.IngredientScreen();
     }
 
+    // if the user actually entered any ingredients...
     if (!userIngredients.empty()) {
-        unordered_map<string, Recipe*> recipes = GetDataFromCSVFile(userIngredients);
 
-        //testing
-        string name = "No-Bake Nut Cookies";
-        string ingredients = "1 c. firmly packed brown sugar, 1/2 c. evaporated milk, 1/2 tsp. vanilla, 1/2 c. broken nuts (pecans), 2 Tbsp. butter or margarine, 3 1/2 c. bite size shredded rice biscuits";
-        string instructions = "In a heavy 2-quart saucepan, mix brown sugar, nuts, evaporated milk and butter or margarine., Stir over medium heat until mixture bubbles all over top., Boil and stir 5 minutes more. Take off heat., Stir in vanilla and cereal; mix well., Using 2 teaspoons, drop and shape into 30 clusters on wax paper., Let stand until firm, about 30 minutes.";
-        string link = "www.cookbooks.com/Recipe-Details.aspx?id=44874";
-        RecommendationWindow recommendationWindow(name, ingredients, instructions, link);
-        recommendationWindow.RecommendationScreen();
+        // do something with user's choice of sorting algo...
+
+        // get a vector of recipes sorted from highest to lowest according
+        // to number of matching ingredients
+        vector<Recipe *> recipes = GetDataFromCSVFile(userIngredients);
+        vector<Recipe *> visitedRecipes;
+
+        char decision;
+        int x = 0;
+        bool decidedOnRecipe = false;
+
+        //  while loop to be able to loop through recipe recommendation windows
+        while (true) {
+
+            // if the user hasn't decided, show the recipe at the current index
+            if (!decidedOnRecipe) {
+                string name = recipes[x]->getName();
+                string ingredients = recipes[x]->getIngredients();
+                string instructions = recipes[x]->getInstructions();
+                string link = recipes[x]->getLink();
+
+                RecommendationWindow recommendationWindow(name, ingredients, instructions, link);
+                decision = recommendationWindow.RecommendationScreen(decidedOnRecipe);
+                visitedRecipes.push_back(recipes[x]);
+            }
+            // if the user closed the window, break the while loop
+            if (decision == 'd') break;
+            // if the user decided to go left, go left one index
+            // unless we are already at the first index
+            else if (decision == 'l' && x != 0) x--;
+            // if the user decided to go right, go right one index
+            // unless we are already at the last index
+            else if (decision == 'r' && x != recipes.size() - 1) x++;
+        }
+        //if the user has decided on their recipe, display the 'thank you' window
+        if (decidedOnRecipe) {
+            ThankYouWindow thankyouwindow;
+            thankyouwindow.ThankYouScreen();
+        }
     }
-
 }
