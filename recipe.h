@@ -9,6 +9,7 @@ class Recipe {
     string instructions;
     string link;
     string NER;
+    int matchingIngredients;
 
 public:
     //constructor
@@ -21,4 +22,7 @@ public:
     string getInstructions();
     string getLink();
     string getNER();
+    
+    //mutator:
+    void changeMatching(int &matching);
 };
