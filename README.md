@@ -27,7 +27,7 @@ First, press the space bar to begin. Then, the program will ask which sorting al
 Made by: Maeson Vallee, Ria Ghandi, and Lyndsey LaBorde 
 - Maeson's Github: https://github.com/mvcloud 
 - Ria's Github: https://github.com/riag01
-- Lyndesy's Github: https://github.com/lyndseylaborde
+- Lyndsey's Github: https://github.com/lyndseylaborde
 
 _More credits:_
 - https://cupnooble.itch.io for the assets/sprites 
