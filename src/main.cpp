@@ -1,30 +1,31 @@
-#include "recipe.h"
-#include "GetData.h"
+#include "Recipes.h"
 #include "MergeSort.h"
+#include "QuickSort.h"
 #include "WelcomeWindow.h"
-#include "ChooseAlgorithmWindow.h"
+#include "ChooseAlgorithmAndSizeWindow.h"
 #include "IngredientWindow.h"
 #include "RecommendationWindow.h"
 #include "ThankYouWindow.h"
-#include "leaker.h"
+#include "TextureManager.h"
 using namespace std;
 
 int main() {
+
     // open welcome window
     bool doneWithWelcome = false;
     WelcomeWindow welcome;
     doneWithWelcome = welcome.WelcomeScreen();
 
-    // get the user's decision on what sorting algorithm to use
+    // get the user's decision on what sorting algorithm to use and max num of ingredients
     bool choseSortingAlgo = false;
     char sortingAlgo;
+    int maxIngredients;
     if (doneWithWelcome) {
-        ChooseAlgorithmWindow choseAlgorithmWindow;
-        choseAlgorithmWindow.ChooseAlgorithmScreen(choseSortingAlgo, sortingAlgo);
+        ChooseAlgorithmAndSizeWindow choseAlgorithmWindow;
+        choseAlgorithmWindow.ChooseAlgorithmScreen(choseSortingAlgo, sortingAlgo, maxIngredients);
     }
 
     // when done with welcome window and choosing an algo, open up ingredient window and get/store
-    // the user's current ingredients
     unordered_set<string> userIngredients;
     if (choseSortingAlgo) {
         IngredientWindow ingredientWindow;
@@ -33,13 +34,17 @@ int main() {
 
     // if the user actually entered any ingredients...
     if (!userIngredients.empty()) {
-        // get a vector of recipes sorted from highest to lowest according
-        // to number of matching ingredients
-        vector<Recipe*> recipes = GetDataFromCSVFile(userIngredients);
+        // get a vector of recipes sorted from highest to lowest according to number of matching ingredients
+        Recipes recipes;
+        recipes.GetDataFromCSVFile(userIngredients, maxIngredients);
+        vector<Recipe*> recipeVector = recipes.getRecipeVector();
 
         // call the  user's sorting algo of choice
         if (sortingAlgo == 'm') {
-            mergeSort(recipes, 0, recipes.size()-1);
+            mergeSort(recipeVector, 0, recipeVector.size()-1);
+        }
+        else if (sortingAlgo == 'q') {
+            quickSort(recipeVector, 0, recipeVector.size()-1);
         }
 
         vector<Recipe*> visitedRecipes;
@@ -52,23 +57,21 @@ int main() {
 
             // if the user hasn't decided, show the recipe at the current index
             if (!decidedOnRecipe) {
-                string name = recipes[x]->getName();
-                string ingredients = recipes[x]->getIngredients();
-                string instructions = recipes[x]->getInstructions();
-                string link = recipes[x]->getLink();
+                string name = recipeVector[x]->getName();
+                string ingredients = recipeVector[x]->getIngredients();
+                string instructions = recipeVector[x]->getInstructions();
+                string link = recipeVector[x]->getLink();
 
                 RecommendationWindow recommendationWindow(name, ingredients, instructions, link);
                 decision = recommendationWindow.RecommendationScreen(decidedOnRecipe);
-                visitedRecipes.push_back(recipes[x]);
+                visitedRecipes.push_back(recipeVector[x]);
             }
             // if the user closed the window, break the while loop
             if (decision == 'd') break;
-            // if the user decided to go left, go left one index
-            // unless we are already at the first index
+            // user decided to go backward (left)
             else if (decision == 'l' && x != 0) x--;
-            // if the user decided to go right, go right one index
-            // unless we are already at the last index
-            else if (decision == 'r' && x != recipes.size() - 1) x++;
+            // user decided to go forward (right)
+            else if (decision == 'r' && x != recipeVector.size() - 1) x++;
         }
         //if the user has decided on their recipe, display the 'thank you' window
         if (decidedOnRecipe) {
@@ -76,4 +79,6 @@ int main() {
             thankyouwindow.ThankYouScreen();
         }
     }
+    //clear texture unordered map
+    TextureManager::Clear();
 }
