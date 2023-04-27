@@ -37,3 +37,4 @@ _More credits:_
 - UF COP3503 Minesweeper Project PDF
 - Professor Fox from UF's Texture Manager class
 - https://towardsdatascience.com/an-overview-of-quicksort-algorithm-- b9144e314a72#:~:text=Worst%20Case%20Complexity%3A%20The%20worst,quicksort%20is%20O%20(n2)%20.  (quicksort)
+- https://www.geeksforgeeks.org/ios-good-function-in-c-with-examples/
