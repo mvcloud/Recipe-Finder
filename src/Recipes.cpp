@@ -9,6 +9,7 @@ Recipes::~Recipes() {
     recipes.clear();
 }
 
+// parse through the data set and add to the recipe vector
 void Recipes::GetDataFromCSVFile(unordered_set<string> &userIngredients, int &maxIngredients) {
 
     ifstream file("files/data.csv");
@@ -54,6 +55,7 @@ void Recipes::GetDataFromCSVFile(unordered_set<string> &userIngredients, int &ma
             Recipe* recipe = new Recipe(name,ingredients, instructions, link, NER);
             recipe->numMatching(userIngredients);
 
+		// add to recipes vector if matching ingredients is above zero and total ingredients are less than max ingredients
             if (recipe->getMatchingIngredients() > 0 && recipe->getTotalIngredients() <= maxIngredients) {
                 recipes.push_back(recipe);
             }
