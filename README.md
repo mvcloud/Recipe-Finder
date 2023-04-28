@@ -24,7 +24,7 @@ First, press the space bar to begin. Then, the program will ask which sorting al
 ## ***Credits:***
 
 
-Made by: Maeson Vallee, Ria Ghandi, and Lyndsey LaBorde 
+Made by: Maeson Vallee, Ria Gandhi, and Lyndsey LaBorde 
 - Maeson's Github: https://github.com/mvcloud 
 - Ria's Github: https://github.com/riag01
 - Lyndsey's Github: https://github.com/lyndseylaborde
