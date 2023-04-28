@@ -360,7 +360,7 @@ char RecommendationWindow::RecommendationScreen(bool &decidedReturn) {
             }
         }
 
-        // draw backgorund
+        // draw everything
         sf::Color background(210, 214, 199);
         window.clear(background);
         draw(window);
