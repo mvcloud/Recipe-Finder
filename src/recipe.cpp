@@ -62,7 +62,6 @@ void Recipe::numMatching(unordered_set<std::string> &userIngredients) {
 	    // user has that ingredient
         if (userIngredients.find(recipeIngredients[i]) != userIngredients.end()) {
             matches++;
-            //cout << matches << endl;
         }
     }
     matchingIngredients = matches;
