@@ -18,7 +18,7 @@ void ThankYouWindow::setText(sf::Text &text, float x, float y) {
 
 void ThankYouWindow::setUpSprites() {
 
-    // got this cursoe functionality from https://en.sfml-dev.org/forums/index.php?topic=27646.0
+    // got this cursor functionality from https://en.sfml-dev.org/forums/index.php?topic=27646.0
     sf::Image curimg;
     curimg.loadFromFile("files/sprites/cursor.png");
     cur.loadFromPixels(curimg.getPixelsPtr(), curimg.getSize(), sf::Vector2u(0,0));
